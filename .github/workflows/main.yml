@@ -32,7 +32,10 @@ jobs:
           third line
           EOF
           )
-          echo content=$(echo $MY_STRING | tr "\n" "%") >> $GITHUB_OUTPUT
+          cat $MY_STRING
+          content=$(echo $MY_STRING | tr "\n" "%")
+          echo $content
+          echo content=$content >> $GITHUB_OUTPUT
         id: my_string
       - name: display string
         run: |
