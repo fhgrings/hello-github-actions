@@ -9,3 +9,18 @@ jobs:
       - uses: ./action-a
         with:
           MY_NAME: "Mona"
+      - name: Run tests
+        run: |
+          echo "mix-compile--warnings-as-errors=$(mix compile --warnings-as-errors)\n" >> $GITHUB_OUTPUT
+          echo "mix-format--check-formatted=$(mix format --check-formatted)\n" >> $GITHUB_OUTPUT
+          echo "mix-ecto_create=$(mix ecto.create)\n" >> $GITHUB_OUTPUT
+          echo "mix-ecto_migrate=$(mix ecto.migrate)\n" >> $GITHUB_OUTPUT
+          echo "mix-test=$(mix test)\n" >> $GITHUB_OUTPUT
+        id: run_tests
+
+      - name: Slack Notification
+        run: |
+          echo "SLACK_WEBHOOK = $SLACK_MESSAGE"
+        env:
+          SLACK_MESSAGE: ${{join(steps.run_tests.outputs.*, '\n')}}
+          SLACK_TITLE: CI Test Suite
