@@ -32,7 +32,7 @@ jobs:
           third line
           EOF
           )
-          cat $MY_STRING
+          echo $MY_STRING
           content=$(echo $MY_STRING | tr "\n" "%")
           echo $content
           echo content=$content >> $GITHUB_OUTPUT
