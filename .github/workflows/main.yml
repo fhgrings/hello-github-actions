@@ -22,7 +22,8 @@ jobs:
           echo "mix-format=$(echo "something")\n" >> $GITHUB_OUTPUT
       - name: Get version
         id: vars
-        run: echo ::set-output name=version::$(cat VERSION)
+#         run: echo ::set-output name=version::$(cat VERSION)
+        run: echo "{version}={version}" >> $GITHUB_OUTPUT
         
       - name: Test output
         run: echo ${{ steps.vars.outputs.version }}
