@@ -12,7 +12,8 @@ jobs:
       - name: Get Some output data
         id: run_tests
         run: |
-          echo "mix-format--check-formatted=$(echo TT)\n" >> $GITHUB_OUTPUT
+          echo "mix-format--check-formatted=$(echo "TT\nTT")\n" >> $GITHUB_OUTPUT
+          echo "YY\nYY" >> $GITHUB_OUTPUT
 
       - name: Slack Notification
         run: |
