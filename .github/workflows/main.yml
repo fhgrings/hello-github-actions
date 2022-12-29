@@ -11,7 +11,7 @@ jobs:
           MY_NAME: "Mona"
       - run: | 
          some_response=$(curl google.com)
-         echo response_output=$some_response >> test.txt
+         echo response_output='$some_response' >> test.txt
         id: some-request
 
       - name: Join Array
@@ -24,7 +24,7 @@ jobs:
 
       - name: Cat test.txt
         env: 
-          PLAN: "terraform\n${{$(cat test.txt)}}"
+          PLAN: "terraform\n${{}}"
         run: |
           echo "Response is: ${process.env.PLAN}"
 
