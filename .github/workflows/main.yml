@@ -12,8 +12,7 @@ jobs:
       - name: Get Some output data
         id: run_tests
         run: |
-          echo "mix-format--check-formatted=$(echo "TT\nTT")\n" >> $GITHUB_OUTPUT
-          echo "YY\nYY" >> $GITHUB_OUTPUT
+          echo "mix-format=$(echo "TT\nTT")\n" >> $GITHUB_OUTPUT
 
       - name: Slack Notification
         run: |
@@ -23,5 +22,5 @@ jobs:
         env:
           SLACK_MESSAGE: ${{join(steps.run_tests.outputs.*, '\n')}}
           SLACK_TITLE: ${{steps.run_tests.outputs.stdout}}
-          GITHUB_OUT: ${{steps.run_tests.outputs.GITHUB_OUTPUT}}
+          GITHUB_OUT: ${{steps.run_tests.outputs.mix-format}}
 
