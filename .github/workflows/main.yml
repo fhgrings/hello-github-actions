@@ -9,6 +9,13 @@ jobs:
       - uses: ./action-a
         with:
           MY_NAME: "Mona"
+      - run: | 
+         some_response=$(curl -i -H "Content-Type: application/json" -X GET "google.com")
+         echo response_output=$some_response >> $GITHUB_OUTPUT
+        id: some-request
+      - run: |
+         echo "Response is: ${{ steps.some-request.outputs.response_output }}"
+         
       - name: Get Some output data
         id: run_tests
         run: |
