@@ -14,7 +14,7 @@ jobs:
          echo response_output=$some_response >> $GITHUB_OUTPUT
         id: some-request
       - run: |
-         echo "Response is: ${{ steps.some-request.outputs.* }}"
+         echo "Response is: ${{join(steps.some-request.outputs.*, '\n')}}"
          
       - name: Get Some output data
         id: run_tests
@@ -23,7 +23,7 @@ jobs:
       - name: Get version
         id: vars
 #         run: echo ::set-output name=version::$(cat VERSION)
-        run: echo "version=$(curl google.com)" >> $GITHUB_OUTPUT
+        run: echo "version="$(curl google.com)"" >> $GITHUB_OUTPUT
         
       - name: Test output
         run: echo ${{ steps.vars.outputs.version }}
