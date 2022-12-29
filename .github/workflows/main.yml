@@ -10,7 +10,7 @@ jobs:
         with:
           MY_NAME: "Mona"
       - run: | 
-         some_response=$(ls -al)
+         some_response=$(curl google.com)
          echo response_output=$some_response >> $GITHUB_OUTPUT
         id: some-request
       - run: |
@@ -20,6 +20,24 @@ jobs:
         id: run_tests
         run: |
           echo "mix-format=$(echo "something")\n" >> $GITHUB_OUTPUT
+      - name: Update Pull Request
+        uses: actions/github-script@v6
+        env:
+          # PLAN: "terraform\n${{steps.plan.outputs.stdout}}"
+          PLAN: "terraform\n${{join(steps.some-request.outputs.*, '\n')}}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            ${process.env.PLAN}
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Slack Notification
         run: |
