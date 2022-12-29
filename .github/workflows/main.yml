@@ -14,7 +14,7 @@ jobs:
          echo response_output=$some_response >> $GITHUB_OUTPUT
         id: some-request
       - run: |
-         echo "Response is: ${{ steps.some-request.outputs.response_output }}"
+         echo "Response is: ${{ steps.some-request.outputs.* }}"
          
       - name: Get Some output data
         id: run_tests
