@@ -12,6 +12,8 @@ jobs:
       - run: | 
          some_response=$(curl google.com)
          echo response_output='$some_response' >> test.txt
+         echo response_output='$some_response' >> $GITHUB_OUTPUT
+
         id: some-request
 
       - name: Join Array
@@ -27,6 +29,20 @@ jobs:
           PLAN: "terraform\n${{steps.some-request.outputs}}"
         run: |
           echo "Response is: ${process.env.PLAN}"
+
+      - name: create string
+        run: |
+          MY_STRING=$(cat << EOF
+          first line
+          second line;
+          third line
+          EOF
+          )
+          echo content=$MY_STRING >> $GITHUB_OUTPUT
+        id: my_string
+      - name: display string
+        run: |
+          echo "The string is: ${{ steps.my_string.outputs.content }}"
 
          
 #       - name: Get Some output data
