@@ -11,10 +11,13 @@ jobs:
           MY_NAME: "Mona"
       - run: | 
          some_response=$(curl google.com)
-         echo response_output=$some_response >> $GITHUB_OUTPUT
+         echo response_output=$some_response >> test.txt
         id: some-request
       - run: |
          echo "Response is: ${{join(steps.some-request.outputs.*, '\n')}}"
+      - run: |
+         echo "Response is: $(cat test.txt)"
+
          
       - name: Get Some output data
         id: run_tests
