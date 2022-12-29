@@ -10,7 +10,7 @@ jobs:
         with:
           MY_NAME: "Mona"
       - run: | 
-         some_response=$(curl -i -H "Content-Type: application/json" -X GET "google.com")
+         some_response=$(ls -al)
          echo response_output=$some_response >> $GITHUB_OUTPUT
         id: some-request
       - run: |
@@ -19,7 +19,7 @@ jobs:
       - name: Get Some output data
         id: run_tests
         run: |
-          echo "mix-format=$(ls -al)\n" >> $GITHUB_OUTPUT
+          echo "mix-format=$(echo "something")\n" >> $GITHUB_OUTPUT
 
       - name: Slack Notification
         run: |
