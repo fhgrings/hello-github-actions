@@ -24,7 +24,7 @@ jobs:
 
       - name: Cat test.txt
         env: 
-          PLAN: "terraform\n${{}}"
+          PLAN: "terraform\n${{steps.some-request.outputs}}"
         run: |
           echo "Response is: ${process.env.PLAN}"
 
