@@ -23,7 +23,7 @@ jobs:
       - name: Get version
         id: vars
 #         run: echo ::set-output name=version::$(cat VERSION)
-        run: echo "version={version}" >> $GITHUB_OUTPUT
+        run: echo "version=$(curl google.com)" >> $GITHUB_OUTPUT
         
       - name: Test output
         run: echo ${{ steps.vars.outputs.version }}
