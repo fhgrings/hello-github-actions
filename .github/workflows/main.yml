@@ -6,60 +6,69 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: ./action-a
+#       - uses: ./action-a
         with:
           MY_NAME: "Mona"
       - run: | 
          some_response=$(curl google.com)
          echo response_output=$some_response >> test.txt
         id: some-request
-      - run: |
+
+      - name: Join Array
+        run: |
          echo "Response is: ${{join(steps.some-request.outputs.*, '\n')}}"
-      - run: |
+         
+      - name: Cat test.txt
+        run: |
          echo "Response is: $(cat test.txt)"
 
+      - name: Cat test.txt
+        env: 
+          PLAN: "terraform\n${{cat test.txt}}"
+        run: |
+          echo "Response is: ${process.env.PLAN}"
+
          
-      - name: Get Some output data
-        id: run_tests
-        run: |
-          echo "mix-format=$(echo "something")\n" >> $GITHUB_OUTPUT
-      - name: Get version
-        id: vars
-#         run: echo ::set-output name=version::$(cat VERSION)
-        run: echo "version="$(curl google.com)"" >> $GITHUB_OUTPUT
+#       - name: Get Some output data
+#         id: run_tests
+#         run: |
+#           echo "mix-format=$(echo "something")\n" >> $GITHUB_OUTPUT
+#       - name: Get version
+#         id: vars
+#         run: echo "version="$(curl google.com)"" >> $GITHUB_OUTPUT
         
-      - name: Test output
-        run: echo ${{ steps.vars.outputs.version }}
+#       - name: Test output
+#         run: echo ${{ steps.vars.outputs.version }}
         
         
-      - name: Update Pull Request
-        uses: actions/github-script@v6
-        env:
-          # PLAN: "terraform\n${{steps.plan.outputs.stdout}}"
-          PLAN: "terraform\n${{join(steps.some-request.outputs.*, '\n')}}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            script: |
-              const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-              ${process.env.PLAN}
+#       - name: Update Pull Request
+#         uses: actions/github-script@v6
+#         env:
+#           # PLAN: "terraform\n${{steps.plan.outputs.stdout}}"
+# #           PLAN: "terraform\n${{join(steps.some-request.outputs.*, '\n')}}"
+#           PLAN: "terraform\n${{cat test.txt}}"
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+#             ${process.env.PLAN}
 
-              *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+#             *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
+#             github.rest.issues.createComment({
+#               issue_number: context.issue.number,
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               body: output
+#             })
 
-      - name: Slack Notification
-        run: |
-          echo "SLACK_WEBHOOK = $SLACK_MESSAGE"
-          echo "SLACK_TITLE = $SLACK_TITLE"
-          echo "GITHUB_OUT = $GITHUB_OUT"
-        env:
-          SLACK_MESSAGE: ${{join(steps.run_tests.outputs.*, '\n')}}
-          SLACK_TITLE: ${{steps.run_tests.outputs.stdout}}
-          GITHUB_OUT: ${{steps.run_tests.outputs.mix-format}}
+#       - name: Slack Notification
+#         run: |
+#           echo "SLACK_WEBHOOK = $SLACK_MESSAGE"
+#           echo "SLACK_TITLE = $SLACK_TITLE"
+#           echo "GITHUB_OUT = $GITHUB_OUT"
+#         env:
+#           SLACK_MESSAGE: ${{join(steps.run_tests.outputs.*, '\n')}}
+#           SLACK_TITLE: ${{steps.run_tests.outputs.stdout}}
+#           GITHUB_OUT: ${{steps.run_tests.outputs.mix-format}}
 
